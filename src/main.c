@@ -30,15 +30,15 @@ static void data_confirmation(NWK_DataReq_t *req) {
 	ready_to_send = 1;
 }
 
-static void send_data(void *data, size_t length) {
+static void send_data(uint8_t app_endpoint, void *data, size_t length) {
 	if (length == 0 || ready_to_send == 0)
 		return;
 
 	memcpy(data_buffer, data, length);
 
 	appDataReq.dstAddr = 1-APP_ADDR;
-	appDataReq.dstEndpoint = APP_ENDPOINT;
-	appDataReq.srcEndpoint = APP_ENDPOINT;
+	appDataReq.dstEndpoint = app_endpoint;
+	appDataReq.srcEndpoint = app_endpoint;
 	appDataReq.options = NWK_OPT_ENABLE_SECURITY;
 	appDataReq.data = data_buffer;
 	appDataReq.size = length;
@@ -62,7 +62,7 @@ static void app_init(void) {
 
 	PHY_SetRxState(true);
 
-	NWK_OpenEndpoint(APP_ENDPOINT, data_received);
+	NWK_OpenEndpoint(APP_ENDPOINT_0, data_received);
 
     uart_init(38400);
 	ready_to_send = 1;

@@ -6,7 +6,19 @@
 // Address must be set to 0 for the first device, and to 1 for the second one.
 #define APP_ADDR                  0
 #define APP_PANID                 0x4567
-#define APP_ENDPOINT              13
+#define APP_ENDPOINT_0            0
+#define APP_ENDPOINT_1            1
+#define APP_ENDPOINT_2            2
+#define APP_ENDPOINT_3            3
+#define APP_ENDPOINT_4            4
+#define APP_ENDPOINT_5            5
+#define APP_ENDPOINT_6            6
+#define APP_ENDPOINT_7            7
+#define APP_ENDPOINT_8            8
+#define APP_ENDPOINT_9            9
+#define APP_ENDPOINT_10           10
+#define APP_ENDPOINT_11           11
+#define APP_ENDPOINT_12           12
 
 #define APP_CHANNEL               0x0f
 
