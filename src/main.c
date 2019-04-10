@@ -13,7 +13,9 @@
 #define APP_BUFFER_SIZE     (NWK_MAX_PAYLOAD_SIZE - NWK_SECURITY_MIC_SIZE)
 
 static void send_data(void *data, size_t length);
+
 void print(char *str);
+
 void println(char *str);
 
 static NWK_DataReq_t appDataReq;
@@ -25,14 +27,15 @@ char uart_buffer[UART_BUFFER_LEN];
 volatile uint8_t uart_int = 0;
 
 static void data_confirmation(NWK_DataReq_t *req) {
-	memset(data_buffer, 0, APP_BUFFER_SIZE);
-	(void)req;
-	ready_to_send = 1;
+    memset(data_buffer, 0, APP_BUFFER_SIZE);
+    ready_to_send = 1;
+    (void) req;
 }
 
 static void send_data(uint8_t app_endpoint, void *data, size_t length) {
-	if (length == 0 || ready_to_send == 0)
-		return;
+    if (length == 0 || ready_to_send == 0) {
+        return;
+    }
 
 	memcpy(data_buffer, data, length);
 
@@ -50,22 +53,23 @@ static void send_data(uint8_t app_endpoint, void *data, size_t length) {
 }
 
 static bool data_received(NWK_DataInd_t *ind) {
-	for (uint8_t i = 0; i < ind->size; i++)
+    for (uint8_t i = 0; i < ind->size; i++) {
         uart_send(ind->data[i]);
-	return true;
+    }
+    return true;
 }
 
 static void app_init(void) {
-	NWK_SetAddr(APP_ADDR);
-	NWK_SetPanId(APP_PANID);
-	PHY_SetChannel(APP_CHANNEL);
+    NWK_SetAddr(APP_ADDR);
+    NWK_SetPanId(APP_PANID);
+    PHY_SetChannel(APP_CHANNEL);
 
-	PHY_SetRxState(true);
-
+    PHY_SetRxState(true);
+    
 	NWK_OpenEndpoint(APP_ENDPOINT_0, data_received);
 
     uart_init(38400);
-	ready_to_send = 1;
+    ready_to_send = 1;
 }
 
 static void task_handler(void) {
@@ -76,13 +80,13 @@ static void task_handler(void) {
 }
 
 int main() {
-	SYS_Init();
-	app_init();
+    SYS_Init();
+    app_init();
 
-	while (1) {
-		SYS_TaskHandler();
-		task_handler();
-	}
+    while (1) {
+        SYS_TaskHandler();
+        task_handler();
+    }
 }
 
 void print(char *str) {

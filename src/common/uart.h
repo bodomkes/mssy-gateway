@@ -6,8 +6,8 @@
 
 #include "common.h"
 
-#ifndef PROJEKT2_UART_H
-#define PROJEKT2_UART_H
+#ifndef MSSY_GATEWAY_UART_H
+#define MSSY_GATEWAY_UART_H
 
 #define UART_BUFFER_LEN 50
 
@@ -19,4 +19,4 @@ void uart_send_string(char *str);
 
 size_t uart_recv_string(char *tmp);
 
-#endif //PROJEKT2_UART_H
+#endif //MSSY_GATEWAY_UART_H

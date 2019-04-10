@@ -1,5 +1,5 @@
-#ifndef _CONFIG_H_
-#define _CONFIG_H_
+#ifndef MSSY_GATEWAY_CONFIG_H
+#define MSSY_GATEWAY_CONFIG_H
 
 #define APP_BUFFER_SIZE     (NWK_MAX_PAYLOAD_SIZE - NWK_SECURITY_MIC_SIZE)
 
@@ -32,4 +32,4 @@
 #define NWK_ENABLE_ROUTING
 
 
-#endif // _CONFIG_H_
+#endif // MSSY_GATEWAY_CONFIG_H

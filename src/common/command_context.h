@@ -1,8 +1,8 @@
 #include <stdint.h>
 #include <string.h>
 
-#ifndef PROJEKT2_COMMAND_CONTEXT_H
-#define PROJEKT2_COMMAND_CONTEXT_H
+#ifndef MSSY_GATEWAY_COMMAND_CONTEXT_H
+#define MSSY_GATEWAY_COMMAND_CONTEXT_H
 
 #define COMMAND_LEN 0 // This has to be increased with every command in array!
 
@@ -12,4 +12,4 @@ void decode_command(char *cmd);
 
 void switch_context(uint8_t ctx);
 
-#endif //PROJEKT2_COMMAND_CONTEXT_H
+#endif //MSSY_GATEWAY_COMMAND_CONTEXT_H
