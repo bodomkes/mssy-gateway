@@ -12,7 +12,7 @@
 
 #define APP_BUFFER_SIZE     (NWK_MAX_PAYLOAD_SIZE - NWK_SECURITY_MIC_SIZE)
 
-static void send_data(void *data, size_t length);
+static void send_data(uint8_t app_endpoint, void *data, size_t length);
 
 void print(char *str);
 
