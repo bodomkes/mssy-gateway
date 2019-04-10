@@ -9,10 +9,11 @@
 #include "sysTimer.h"
 #include "protocols.h"
 #include "uart.h"
-
-#define APP_BUFFER_SIZE     (NWK_MAX_PAYLOAD_SIZE - NWK_SECURITY_MIC_SIZE)
+#include "database.h"
 
 static void send_data(uint8_t app_endpoint, void *data, size_t length);
+
+void handle_command(struct command_t *command, uint8_t endpoint);
 
 void print(char *str);
 
@@ -53,10 +54,25 @@ static void send_data(uint8_t app_endpoint, void *data, size_t length) {
 }
 
 static bool data_received(NWK_DataInd_t *ind) {
-    for (uint8_t i = 0; i < ind->size; i++) {
-        uart_send(ind->data[i]);
-    }
+    union command_packet_t packet = {
+            .bytes = {0}
+    };
+
+    memcpy(packet.bytes, ind->data, ind->size);
+    handle_command(&packet.command, ind->srcEndpoint);
     return true;
+}
+
+void handle_command(struct command_t *command, uint8_t endpoint) {
+    switch (command->header.command_id) {
+        case COMMAND_CONNECT:
+            if (add_endpoint(endpoint)) {
+                println("Adding of endpoint has failed.");
+            } else {
+                println("New endpoint has been added.");
+            }
+            break;
+    }
 }
 
 static void app_init(void) {
@@ -69,6 +85,7 @@ static void app_init(void) {
 	NWK_OpenEndpoint(APP_ENDPOINT_0, data_received);
 
     uart_init(38400);
+    init_database();
     ready_to_send = 1;
 }
 

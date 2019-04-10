@@ -18,6 +18,7 @@ PROGRAMMER = -c xplainedpro -P usb
 OBJECTS    = src/main.o \
 src/common/command_context.o \
 src/common/uart.o \
+src/common/database.o \
 $(STACK_PATH)/hal/atmega256rfr2/src/hal.o \
 $(STACK_PATH)/hal/atmega256rfr2/src/halTimer.o \
 $(STACK_PATH)/phy/atmegarfr2/src/phy.o \
