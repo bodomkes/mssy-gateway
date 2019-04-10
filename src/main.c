@@ -19,6 +19,7 @@ void println(char *str);
 static NWK_DataReq_t appDataReq;
 static uint8_t data_buffer[APP_BUFFER_SIZE];
 static uint8_t buffer_position = 0;
+uint8_t ready_to_send = 0;
 
 char uart_buffer[UART_BUFFER_LEN];
 volatile uint8_t uart_int = 0;
@@ -26,10 +27,11 @@ volatile uint8_t uart_int = 0;
 static void data_confirmation(NWK_DataReq_t *req) {
 	memset(data_buffer, 0, APP_BUFFER_SIZE);
 	(void)req;
+	ready_to_send = 1;
 }
 
 static void send_data(void *data, size_t length) {
-	if (length == 0)
+	if (length == 0 || ready_to_send == 0)
 		return;
 
 	memcpy(data_buffer, data, length);
@@ -44,6 +46,7 @@ static void send_data(void *data, size_t length) {
 	NWK_DataReq(&appDataReq);
 
 	buffer_position = 0;
+	ready_to_send = 0;
 }
 
 static bool data_received(NWK_DataInd_t *ind) {
@@ -62,6 +65,7 @@ static void app_init(void) {
 	NWK_OpenEndpoint(APP_ENDPOINT, data_received);
 
     uart_init(38400);
+	ready_to_send = 1;
 }
 
 static void task_handler(void) {
