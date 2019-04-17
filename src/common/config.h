@@ -1,7 +1,7 @@
 #ifndef MSSY_GATEWAY_CONFIG_H
 #define MSSY_GATEWAY_CONFIG_H
 
-#define APP_BUFFER_SIZE     (NWK_MAX_PAYLOAD_SIZE - NWK_SECURITY_MIC_SIZE)
+#define APP_BUFFER_SIZE           105
 
 // Address must be set to 0 for the first device, and to 1 for the second one.
 #define APP_ADDR                  0
