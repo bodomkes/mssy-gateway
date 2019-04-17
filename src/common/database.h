@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "protocols.h"
 
 #ifndef MSSY_GATEWAY_DATABASE_H

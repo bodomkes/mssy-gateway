@@ -1,9 +1,5 @@
 #include "database.h"
 
-extern void print(char *str);
-
-extern void println(char *str);
-
 uint8_t endpoint_exists(uint8_t endpoint);
 
 struct row_t {
@@ -42,13 +38,10 @@ uint8_t add_endpoint(uint8_t endpoint) {
 }
 
 void print_devices() {
-    char buffer[10];
-    println("-- Registered devices -- ");
+    printf("-- Registered devices -- \n");
     for (int i = 0; i < DEVICE_COUNT; i++) {
         if (!rows[i].is_free) {
-            print("Device endpoint id: ");
-            ultoa(rows[i].app_endpoint, buffer, 10);
-            println(buffer);
+            printf("Device endpoint id: %d\n", rows[i].app_endpoint);
         }
     }
 }

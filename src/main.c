@@ -15,9 +15,9 @@ static void send_data(uint8_t app_endpoint, void *data, size_t length);
 
 void handle_command(struct command_t *command, uint8_t endpoint);
 
-void print(char *str);
+int uart_putchar(char byte, FILE *stream);
 
-void println(char *str);
+static FILE mystdout = FDEV_SETUP_STREAM(&uart_putchar, NULL, _FDEV_SETUP_WRITE);
 
 static NWK_DataReq_t appDataReq;
 static uint8_t data_buffer[APP_BUFFER_SIZE];
@@ -38,19 +38,19 @@ static void send_data(uint8_t app_endpoint, void *data, size_t length) {
         return;
     }
 
-	memcpy(data_buffer, data, length);
+    memcpy(data_buffer, data, length);
 
-	appDataReq.dstAddr = 1-APP_ADDR;
-	appDataReq.dstEndpoint = app_endpoint;
-	appDataReq.srcEndpoint = app_endpoint;
-	appDataReq.options = NWK_OPT_ENABLE_SECURITY;
-	appDataReq.data = data_buffer;
-	appDataReq.size = length;
-	appDataReq.confirm = data_confirmation;
-	NWK_DataReq(&appDataReq);
+    appDataReq.dstAddr = 1 - APP_ADDR;
+    appDataReq.dstEndpoint = app_endpoint;
+    appDataReq.srcEndpoint = app_endpoint;
+    appDataReq.options = NWK_OPT_ENABLE_SECURITY;
+    appDataReq.data = data_buffer;
+    appDataReq.size = length;
+    appDataReq.confirm = data_confirmation;
+    NWK_DataReq(&appDataReq);
 
-	buffer_position = 0;
-	ready_to_send = 0;
+    buffer_position = 0;
+    ready_to_send = 0;
 }
 
 static bool data_received(NWK_DataInd_t *ind) {
@@ -67,9 +67,9 @@ void handle_command(struct command_t *command, uint8_t endpoint) {
     switch (command->header.command_id) {
         case COMMAND_CONNECT:
             if (add_endpoint(endpoint)) {
-                println("Adding of endpoint has failed.");
+                printf("Adding of endpoint %d has failed.\n", endpoint);
             } else {
-                println("New endpoint has been added.");
+                printf("New endpoint %d has been added.\n", endpoint);
             }
             break;
     }
@@ -81,8 +81,8 @@ static void app_init(void) {
     PHY_SetChannel(APP_CHANNEL);
 
     PHY_SetRxState(true);
-    
-	NWK_OpenEndpoint(APP_ENDPOINT_0, data_received);
+
+    NWK_OpenEndpoint(APP_ENDPOINT_10, data_received);
 
     uart_init(38400);
     init_database();
@@ -97,6 +97,7 @@ static void task_handler(void) {
 }
 
 int main() {
+    stdout = &mystdout;
     SYS_Init();
     app_init();
 
@@ -106,11 +107,11 @@ int main() {
     }
 }
 
-void print(char *str) {
-    uart_send_string(str);
-}
+int uart_putchar(char byte, FILE *stream) {
+    if (byte == '\n') {
+        uart_send('\r');
+    }
+    uart_send(byte);
 
-void println(char *str) {
-    print(str);
-    print("\r\n");
+    return 0;
 }
