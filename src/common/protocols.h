@@ -26,6 +26,10 @@
 #define DEVICE_TYPE_SLEEP 2
 #define DEVICE_TYPE_TIMER 1
 
+void create_command_packet(void *packet_buffer, uint8_t command, uint8_t size, void *data);
+
+void create_device_packet(void *packet_buffer, struct device_header_t header, uint8_t size, void *data);
+
 struct command_header_t {
     uint8_t command_id;
     size_t len;
