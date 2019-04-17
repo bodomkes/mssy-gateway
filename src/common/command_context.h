@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <string.h>
+#include <stdio.h>
 
 #ifndef MSSY_GATEWAY_COMMAND_CONTEXT_H
 #define MSSY_GATEWAY_COMMAND_CONTEXT_H

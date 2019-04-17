@@ -15,10 +15,6 @@ void print_menu();
 
 void switch_context(uint8_t ctx);
 
-extern void println(char *str);
-
-extern void print(char *str);
-
 // COMMAND DEFINITION BLOCK
 
 // extern void board_init(); Example definition
@@ -41,20 +37,18 @@ void decode_command(char *cmd) {
         }
     }
     if (found < 0) {
-        println("Invalid command!");
+        printf("Invalid command!\n");
         print_menu();
     }
 
 }
 
 void print_menu() {
-    println("Menu:");
+    printf("Menu:\n");
     for (int i = 0; i < COMMAND_LEN; i++) {
         struct command_context current = commands[i];
         if ((current.context & context) > 0) {
-            print(current.command_name);
-            print(" - ");
-            println(current.command_desc);
+            printf("%s - %s", current.command_name, current.command_desc);
         }
     }
 }
