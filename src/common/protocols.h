@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <string.h>
 #include "config.h"
 
 #ifndef MSSY_GATEWAY_PROTOCOLS_H
@@ -25,10 +26,6 @@
 #define DEVICE_TYPE_MOTOR 4
 #define DEVICE_TYPE_SLEEP 2
 #define DEVICE_TYPE_TIMER 1
-
-void create_command_packet(void *packet_buffer, uint8_t command, uint8_t size, void *data);
-
-void create_device_packet(void *packet_buffer, struct device_header_t header, uint8_t size, void *data);
 
 struct command_header_t {
     uint8_t command_id;
@@ -65,5 +62,9 @@ union device_packet_t {
     struct device_t device;
     uint8_t bytes[sizeof(struct device_t)];
 };
+
+void create_command_packet(void *packet_buffer, uint8_t command, void *data, uint8_t size);
+
+void create_device_packet(void *packet_buffer, struct device_header_t header, void *data, uint8_t size);
 
 #endif //PROJEKT2_COMMAND_CONTEXT_H
