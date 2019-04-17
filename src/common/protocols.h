@@ -63,8 +63,8 @@ union device_packet_t {
     uint8_t bytes[sizeof(struct device_t)];
 };
 
-void create_command_packet(void *packet_buffer, uint8_t command, void *data, uint8_t size);
+uint8_t create_command_packet(void *packet_buffer, uint8_t command, void *data, uint8_t size);
 
-void create_device_packet(void *packet_buffer, struct device_header_t header, void *data, uint8_t size);
+uint8_t create_device_packet(void *packet_buffer, struct device_header_t header, void *data, uint8_t size);
 
 #endif //PROJEKT2_COMMAND_CONTEXT_H

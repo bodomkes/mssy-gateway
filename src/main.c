@@ -17,6 +17,8 @@ void handle_command(struct command_t *command, uint8_t endpoint);
 
 int uart_putchar(char byte, FILE *stream);
 
+void send_discovery_request(uint8_t endpoint);
+
 static FILE mystdout = FDEV_SETUP_STREAM(&uart_putchar, NULL, _FDEV_SETUP_WRITE);
 
 static NWK_DataReq_t appDataReq;
@@ -66,13 +68,30 @@ static bool data_received(NWK_DataInd_t *ind) {
 void handle_command(struct command_t *command, uint8_t endpoint) {
     switch (command->header.command_id) {
         case COMMAND_CONNECT:
-            if (add_endpoint(endpoint)) {
+            if (add_endpoint(endpoint) != SUCCESS) {
                 printf("Adding of endpoint %d has failed.\n", endpoint);
             } else {
                 printf("New endpoint %d has been added.\n", endpoint);
+                send_discovery_request(endpoint);
             }
             break;
+        case COMMAND_DISCOVERY_RESPONSE:
+            if (index_of(endpoint) != ERR_NOT_FOUND) {
+                printf("Got discovery response from %d.\n", endpoint);
+                store_devices(endpoint, command->data, command->header.len);
+            } else {
+                printf("Got discovery response from %d which is not in db!\n", endpoint);
+            }
     }
+}
+
+void send_discovery_request(uint8_t endpoint) {
+    uint8_t packet_buffer[APP_BUFFER_SIZE];
+
+    uint8_t len = create_command_packet(packet_buffer, COMMAND_DISCOVERY_REQUEST, 0, 0);
+
+    send_data(endpoint, packet_buffer, len);
+    printf("Sending discovery to %d.\n", endpoint);
 }
 
 static void app_init(void) {
