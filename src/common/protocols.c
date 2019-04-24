@@ -1,6 +1,6 @@
 #include "protocols.h"
 
-void create_command_packet(void *packet_buffer, uint8_t command, void *data, uint8_t size) {
+uint8_t create_command_packet(void *packet_buffer, uint8_t command, void *data, uint8_t size) {
     struct command_header_t header = {
             command,
             size
@@ -9,24 +9,35 @@ void create_command_packet(void *packet_buffer, uint8_t command, void *data, uin
     struct command_t message = {
             .header = header
     };
-    memcpy(message.data, data, size);
+
+    if (size > 0) {
+        memcpy(message.data, data, size);
+    }
 
     union command_packet_t packet = {
             .command = message
     };
-    memcpy(packet_buffer, packet.bytes, sizeof(header) + size);
+    uint8_t buffer_len = sizeof(header) + size;
+    memcpy(packet_buffer, packet.bytes, buffer_len);
+
+    return buffer_len;
 }
 
-void create_device_packet(void *packet_buffer, struct device_header_t header, void *data, uint8_t size) {
+uint8_t create_device_packet(void *packet_buffer, struct device_header_t header, void *data, uint8_t size) {
     header.len = size;
 
     struct device_t device = {
             .header = header
     };
-    memcpy(device.data, data, size);
+    if (size > 0) {
+        memcpy(device.data, data, size);
+    }
 
     union device_packet_t packet = {
             .device = device
     };
-    memcpy(packet_buffer, packet.bytes, sizeof(header) + size);
+    uint8_t buffer_len = sizeof(header) + size;
+    memcpy(packet_buffer, packet.bytes, buffer_len);
+
+    return buffer_len;
 }
