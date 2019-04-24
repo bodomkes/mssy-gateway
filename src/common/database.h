@@ -30,4 +30,6 @@ void remove_endpoint(uint8_t endpoint);
 
 struct device_header_t *get_devices(uint8_t endpoint);
 
+int8_t has_endpoint_device(uint8_t endpoint, uint8_t device_index);
+
 #endif //MSSY_GATEWAY_DATABASE_H
