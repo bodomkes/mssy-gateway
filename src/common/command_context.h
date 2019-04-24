@@ -5,7 +5,7 @@
 #ifndef MSSY_GATEWAY_COMMAND_CONTEXT_H
 #define MSSY_GATEWAY_COMMAND_CONTEXT_H
 
-#define COMMAND_LEN 0 // This has to be increased with every command in array!
+#define COMMAND_LEN 6 // This has to be increased with every command in array!
 
 #define CONTEXT_NORMAL 1
 

@@ -217,11 +217,12 @@ void menu_write() {
 
 	printf("Write value:\n");
 	int8_t value = read_and_convert();
+	int8_t values[1] = {value};
 
     uint8_t device_packet_buffer[APP_BUFFER_SIZE];
 	uint8_t command_packet_buffer[APP_BUFFER_SIZE];
 	struct device_header_t device_header = get_devices(endpoint)[device_index];
-	uint8_t device_packet_size = create_device_packet(device_packet_buffer, device_header, value, sizeof(int8_t));
+	uint8_t device_packet_size = create_device_packet(device_packet_buffer, device_header, values, 1);
 	uint8_t command_packet_size = create_command_packet(command_packet_buffer, COMMAND_WRITE, device_packet_buffer, device_packet_size);
 	send_data(endpoint, command_packet_buffer, command_packet_size);
 }
