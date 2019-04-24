@@ -134,3 +134,105 @@ int uart_putchar(char byte, FILE *stream) {
 
     return 0;
 }
+
+void menu_print_endpoints() {
+	print_endpoints();
+}
+
+void menu_print_devices() {
+	print_endpoints();
+	printf("Enter id of endpoint:\n");
+	uint8_t endpoint = read_and_convert();
+	
+	if (index_of(endpoint) != ERR_NOT_FOUND) {
+		printf("Endpoint %d not found.\n", endpoint);
+		return;
+	}
+	print_devices(endpoint);
+}
+
+void menu_read() {
+	print_endpoints();
+	printf("Enter id of endpoint:\n");
+	uint8_t endpoint = read_and_convert();
+	int8_t endpoint_index = index_of(endpoint);
+	
+	if (endpoint_index == ERR_NOT_FOUND) {
+		printf("Endpoint %d not found.\n", endpoint);
+		return;
+	}
+
+	print_devices(endpoint);
+	printf("Enter index of device:\n");
+	int8_t device_index = read_and_convert();
+	
+	if (has_endpoint_device(endpoint, device_index) == ERR_NOT_FOUND) {
+		printf("Device %d not found.\n", endpoint);
+		return;
+	}
+	
+	uint8_t device_packet_buffer[APP_BUFFER_SIZE];
+	uint8_t command_packet_buffer[APP_BUFFER_SIZE];
+	struct device_header_t device_header = get_devices(endpoint)[device_index];
+	uint8_t device_packet_size = create_device_packet(device_packet_buffer, device_header, 0, 0);
+	uint8_t command_packet_size = create_command_packet(command_packet_buffer, COMMAND_READ_REQUEST, device_packet_buffer, device_packet_size);
+	send_data(endpoint, command_packet_buffer, command_packet_size);
+}
+
+void menu_description() {
+	print_endpoints();
+	printf("Enter id of endpoint:\n");
+	uint8_t endpoint = read_and_convert();
+	
+	if (index_of(endpoint) != ERR_NOT_FOUND) {
+		printf("Endpoint %d not found.\n", endpoint);
+		return;
+	}
+
+	print_devices(endpoint);
+	printf("Write device index:\n");
+	int8_t device_index = read_and_convert();
+
+    uint8_t device_packet_buffer[APP_BUFFER_SIZE];
+	uint8_t command_packet_buffer[APP_BUFFER_SIZE];
+	struct device_header_t device_header = get_devices(endpoint)[device_index];
+	uint8_t device_packet_size = create_device_packet(device_packet_buffer, device_header, 0, 0);
+	uint8_t command_packet_size = create_command_packet(command_packet_buffer, COMMAND_DESCRIPTION_REQUEST, device_packet_buffer, device_packet_size);
+	send_data(endpoint, command_packet_buffer, command_packet_size);
+}
+
+void menu_write() {
+	print_endpoints();
+	printf("Enter id of endpoint:\n");
+	uint8_t endpoint = read_and_convert();
+	
+	if (index_of(endpoint) != ERR_NOT_FOUND) {
+		printf("Endpoint %d not found.\n", endpoint);
+		return;
+	}
+
+	print_devices(endpoint);
+	printf("Write device index:\n");
+	int8_t device_index = read_and_convert();
+
+	printf("Write value:\n");
+	int8_t value = read_and_convert();
+
+    uint8_t device_packet_buffer[APP_BUFFER_SIZE];
+	uint8_t command_packet_buffer[APP_BUFFER_SIZE];
+	struct device_header_t device_header = get_devices(endpoint)[device_index];
+	uint8_t device_packet_size = create_device_packet(device_packet_buffer, device_header, value, sizeof(int8_t));
+	uint8_t command_packet_size = create_command_packet(command_packet_buffer, COMMAND_WRITE, device_packet_buffer, device_packet_size);
+	send_data(endpoint, command_packet_buffer, command_packet_size);
+}
+
+void menu_disconnect() {
+	print_endpoints();
+	printf("Enter id of endpoint to disconnect:\n");
+	uint8_t endpoint = read_and_convert();
+	
+	if (index_of(endpoint) != ERR_NOT_FOUND) {
+		return;
+	}
+	remove_endpoint(endpoint);
+}

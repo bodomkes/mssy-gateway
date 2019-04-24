@@ -18,9 +18,21 @@ void switch_context(uint8_t ctx);
 // COMMAND DEFINITION BLOCK
 
 // extern void board_init(); Example definition
+extern void menu_print_endpoints();
+extern void menu_print_devices();
+extern void menu_read();
+extern void menu_description();
+extern void menu_write();
+extern void menu_disconnect();
 
 struct command_context commands[COMMAND_LEN] = {
-        //  {CONTEXT_NORMAL,  "0",     "Board Init",                 &board_init}  Example definition
+    //  {CONTEXT_NORMAL,  "0",     "Board Init",                 &board_init}  Example definition
+	{CONTEXT_NORMAL,	"0",	"Print endpoints",		&menu_print_endpoints},
+	{CONTEXT_NORMAL,	"1",	"Print devices",		&menu_print_devices},
+	{CONTEXT_NORMAL,	"2",	"Get value",			&menu_read},
+	{CONTEXT_NORMAL,	"3",	"Get description",		&menu_description},
+	{CONTEXT_NORMAL,	"4",	"Set value",			&menu_write},
+	{CONTEXT_NORMAL,	"5",	"Disconnect endpoint",	&menu_disconnect}
 };
 
 // COMMAND DEFINITION BLOCK

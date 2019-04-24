@@ -19,4 +19,6 @@ void uart_send_string(char *str);
 
 size_t uart_recv_string(char *tmp);
 
+int read_and_convert();
+
 #endif //MSSY_GATEWAY_UART_H

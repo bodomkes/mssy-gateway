@@ -104,3 +104,15 @@ struct device_header_t *get_devices(uint8_t endpoint) {
     struct row_t *current = &rows[index_of(endpoint)];
     return current->devices;
 }
+
+int8_t has_endpoint_device(uint8_t endpoint, uint8_t device_index) {
+	if (device_index < DEVICE_COUNT) {
+		struct row_t *endpoint_row = &rows[index_of(endpoint)];
+		struct device_header_t header = endpoint_row->devices[device_index];
+		
+		if (header.device_type) {
+			return SUCCESS;
+		}
+	}
+	return ERR_NOT_FOUND;
+}

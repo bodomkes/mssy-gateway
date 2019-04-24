@@ -83,3 +83,11 @@ static void handle_interrupt() {
     }
 }
 
+int read_and_convert() {
+	while (uart_int != 1);
+	char buffer[UART_BUFFER_LEN];
+	memset((void *) buffer, 0, UART_BUFFER_LEN);
+	uart_recv_string((void *) buffer);
+
+	return atoi(buffer);
+}
