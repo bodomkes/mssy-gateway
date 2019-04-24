@@ -28,4 +28,6 @@ void store_devices(uint8_t endpoint, void *devices, size_t len);
 
 void remove_endpoint(uint8_t endpoint);
 
+struct device_header_t *get_devices(uint8_t endpoint);
+
 #endif //MSSY_GATEWAY_DATABASE_H

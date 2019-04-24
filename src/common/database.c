@@ -99,3 +99,8 @@ void print_devices(uint8_t endpoint) {
         printf("Device index: %d, type: %d, R/W: %d, id: %d.\n", i, header.device_type, header.r_w, header.device_id);
     }
 }
+
+struct device_header_t *get_devices(uint8_t endpoint) {
+    struct row_t *current = &rows[index_of(endpoint)];
+    return current->devices;
+}
